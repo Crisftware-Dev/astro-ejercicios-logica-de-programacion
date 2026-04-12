@@ -2278,7 +2278,22 @@ function clasificarNumero(n) {
       Genera una secuencia de números pseudoaleatorios usando un algoritmo simple.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function generadorPseudoaleatorio(semilla, cantidad) {
+        const a = 1664525      // multiplicador
+        const c = 1013904223   // incremento
+        const m = 2 ** 32      // módulo (gran número)
+        let x = semilla
+        const secuencia = []
+
+        for (let i = 0; i < cantidad; i++) {
+          x = (a * x + c) % m
+          secuencia.push(x)
+        }
+
+        return secuencia
+      }
+    `,
     tasaExito: 95,
   },
   {
@@ -2291,7 +2306,27 @@ function clasificarNumero(n) {
       Clasifica un texto según si tiene todas letras únicas, repite letras o es pangrama.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function clasificarTexto(texto) {
+        const letras = texto.toLowerCase().replace(/[^a-záéíóúüñ]/g, "")
+        const conjunto = new Set(letras)
+
+        const esHeterograma = letras.length === conjunto.size
+        const esIsograma = letras.length !== conjunto.size
+        const esPangrama = "abcdefghijklmnopqrstuvwxyz".split("")
+          .every(l => letras.includes(l))
+
+        if (esPangrama) {
+          return "Es un pangrama (usa todas las letras del alfabeto)."
+        } else if (esHeterograma) {
+          return "Es un heterograma (todas las letras son únicas)."
+        } else if (esIsograma) {
+          return "Es un isograma (algunas letras se repiten)."
+        } else {
+          return "No se pudo clasificar."
+        }
+      }
+    `,
     tasaExito: 90,
   },
   {
@@ -2304,7 +2339,32 @@ function clasificarNumero(n) {
       Simula el uso de una API consumiendo datos ficticios.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      const datosAPI = {
+        usuarios: [
+          { id: 1, nombre: "Ana", correo: "ana@example.com" },
+          { id: 2, nombre: "Luis", correo: "luis@example.com" },
+          { id: 3, nombre: "María", correo: "maria@example.com" }
+        ],
+        productos: [
+          { id: 101, nombre: "Laptop", precio: 1200 },
+          { id: 102, nombre: "Teléfono", precio: 800 },
+          { id: 103, nombre: "Tablet", precio: 500 }
+        ]
+      }
+
+      function consumirAPI(endpoint) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            if (datosAPI[endpoint]) {
+              resolve(datosAPI[endpoint])
+            } else {
+              reject("Endpoint no encontrado")
+            }
+          }, 1000)
+        })
+      }
+    `,
     tasaExito: 95,
   },
   {
@@ -2317,7 +2377,17 @@ function clasificarNumero(n) {
       Extrae parámetros de una URL codificada.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function extraerParametros(url) {
+        const objetoURL = new URL(url)
+        const params = {}
+
+        objetoURL.searchParams.forEach((valor, clave) => {
+          params[clave] = valor
+        })
+        return params
+      }
+    `,
     tasaExito: 95,
   },
   {
@@ -2330,7 +2400,21 @@ function clasificarNumero(n) {
       Cuenta cuántos días del año son viernes 13 en un año dado.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function viernes13(anio) {
+        let contador = 0
+        const meses = 12
+
+        for (let mes = 0; mes < meses; mes++) {
+          const fecha = new Date(anio, mes, 13) // día 13 de cada mes
+          if (fecha.getDay() === 5) { // 5 = viernes
+            contador++
+            console.log("Viernes 13 en: " + fecha.toDateString())
+          }
+        }
+        return "En el año " + anio + " hay " + contador + " viernes 13."
+      }
+    `,
     tasaExito: 95,
   },
   {
@@ -2340,10 +2424,37 @@ function clasificarNumero(n) {
     nivel: 1,
     dificultad: "fácil",
     descripcion: dedent`
-      Simula un juego de adivinar una palabra con pistas y intentos limitados.
+      Simula un juego de adivinar una palabra con pistas e intentos limitados.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function juegoAdivinar() {
+        const palabras = ["javascript", "programacion", "computadora", "internet", "algoritmo"]
+        const indice = Math.floor(Math.random() * palabras.length)
+        const palabraSecreta = palabras[indice]
+        const pista = "Es un lenguaje de programación muy usado en la web."
+        let intentos = 5
+
+        alert("¡Bienvenido al juego de adivinar la palabra!")
+        alert("Pista: " + pista)
+
+        while (intentos > 0) {
+          const intento = prompt("Tienes " + intentos + " intentos. Escribe tu respuesta:").toLowerCase()
+
+          if (intento === palabraSecreta) {
+            alert("🎉 ¡Correcto! Has adivinado la palabra.")
+            return
+          } else {
+            intentos--
+            if (intentos > 0) {
+              alert("❌ Incorrecto. Intenta de nuevo.")
+            }
+          }
+        }
+
+        alert("😢 Se acabaron los intentos. La palabra era: " + palabraSecreta)
+      }
+    `,
     tasaExito: 95,
   },
   {
@@ -2356,7 +2467,17 @@ function clasificarNumero(n) {
       Convierte números entre bases octal, hexadecimal y decimal.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function convertirBases(numero, baseOrigen) {
+        const decimal = parseInt(numero, baseOrigen)
+
+        return {
+          decimal: decimal,
+          octal: decimal.toString(8),
+          hexadecimal: decimal.toString(16).toUpperCase()
+        }
+      }
+    `,
     tasaExito: 95,
   },
   {
@@ -2369,7 +2490,22 @@ function clasificarNumero(n) {
       Convierte texto a un alfabeto ficticio como el de Star Wars (Aurebesh).
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function convertirAurebesh(texto) {
+        const aurebesh = {
+          a: "Aurek", b: "Besh", c: "Cresh", d: "Dorn", e: "Enth",
+          f: "Forn", g: "Grek", h: "Herf", i: "Isk", j: "Jenth",
+          k: "Krill", l: "Leth", m: "Mern", n: "Nern", o: "Osk",
+          p: "Peth", q: "Qek", r: "Resh", s: "Senth", t: "Trill",
+          u: "Usk", v: "Vev", w: "Wesk", x: "Xesh", y: "Yirt", z: "Zerek"
+        }
+        return texto
+          .toLowerCase()
+          .split("")
+          .map(letra => aurebesh[letra] || letra)
+          .join(" ")
+      }
+    `,
     tasaExito: 90,
   },
   {
@@ -2382,7 +2518,24 @@ function clasificarNumero(n) {
       Genera una escalera de caracteres con patrones específicos.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function dibujarEscalera(n) {
+        let resultado = ""
+
+        if (n > 0) {
+          for (let i = n; i >= 0; i--) {
+            resultado += " ".repeat(i) + "_|\n"
+          }
+        } else if (n < 0) {
+          for (let i = 0; i <= Math.abs(n); i++) {
+            resultado += " ".repeat(i) + "_|\n"
+          }
+        } else {
+          resultado = "__"
+        }
+        return resultado
+      }
+    `,
     tasaExito: 85,
   },
   {
@@ -2392,23 +2545,79 @@ function clasificarNumero(n) {
     nivel: 3,
     dificultad: "difícil",
     descripcion: dedent`
-      Se trata de resolver un ejercicio relacionado con el uso de Git y GitHub, probablemente involucrando comandos avanzados o flujos de trabajo típicos de control de versiones.
+      Crea un programa que lea los últimos 10 commits de un repositorio y muestre: Hash, Autor, Mensaje, Fecha y hora
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      // Cambia esta URL por la del repositorio que quieras consultar 
+      const repoURL = "https://github.com/Crisftware-Dev/Spotify-Clone-With-Astro"
+
+      function extraerOwnerRepo(url) {
+        const partes = url.split("/")
+        const owner = partes[3]
+        const repo = partes[4]
+        return { owner, repo }
+      }
+
+      async function obtenerCommits(url) {
+        const { owner, repo } = extraerOwnerRepo(url)
+        const apiURL = https://api.github.com/repos/ + owner + / + repo + /commits?per_page=10
+
+        try {
+          const respuesta = await fetch(apiURL)
+          const commits = await respuesta.json()
+
+          commits.forEach((commit, i) => {
+            const sha = commit.sha.substring(0, 7)
+            const autor = commit.commit.author.name
+            const mensaje = commit.commit.message
+            const fecha = new Date(commit.commit.author.date).toLocaleString("es-ES")
+            console.log("Commit " + (i + 1) + " | " + sha + " | " + autor + " | " + mensaje + " | " + fecha)
+          })
+        } catch (error) {
+          console.error("Error al obtener commits:", error)
+        }
+      }
+    `,
     tasaExito: 85,
   },
   {
     id: 71,
     slug: "web-scraping",
     titulo: "WEB SCRAPING",
-    nivel: 2,
-    dificultad: "medio",
+    nivel: 3,
+    dificultad: "difícil",
     descripcion: dedent`
-      El ejercicio consiste en extraer información de una página web utilizando técnicas de web scraping.
+      El ejercicio consiste en hacer "web scraping" sobre su sitio web: https://holamundo.day. Crea un programa que se conecte a la web del evento e imprima únicamente la agenda de eventos del día 8. Mostrando hora e información de cada uno.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      const axios = require("axios")
+const cheerio = require("cheerio")
+
+async function obtenerAgenda(dia) {
+  try {
+    const url = "https://holamundo.day"
+    const { data } = await axios.get(url)
+    const $ = cheerio.load(data)
+
+    const agendaDia = "$(.agenda[data-day=" + dia + "])"
+
+    if (agendaDia.length === 0) {
+      console.log("No se encontró agenda para el día " + dia)
+      return
+    }
+
+    agendaDia.find(".evento").each((i, el) => {
+      const hora = $(el).find(".hora").text().trim()
+      const info = $(el).find(".info").text().trim()
+      console.log("Hora: " + hora + " | " + "Información: " + info)
+    })
+  } catch (error) {
+    console.error("Error al obtener la agenda:", error.message)
+  }
+}
+    `,
     tasaExito: 90,
   },
   {
@@ -2418,10 +2627,44 @@ function clasificarNumero(n) {
     nivel: 2,
     dificultad: "medio",
     descripcion: dedent`
-      Se debe realizar un análisis estadístico o estructural sobre un texto dado, como contar frecuencias o identificar patrones.
+      Crea un programa que analice texto y obtenga: Número total de palabras, Longitud media de las palabras, Número de oraciones del texto (cada vez que aparecen un punto), Encuentre la palabra más larga. Todo esto utilizando un único bucle.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function analizarTexto(texto) {
+        let totalPalabras = 0
+        let sumaLongitudes = 0
+        let oraciones = 0
+        let palabraMasLarga = ""
+
+        const tokens = texto.split(/(\s+|\.)/)
+
+        for (let token of tokens) {
+          token = token.trim()
+
+          if (token === "") continue
+
+          if (token === ".") {
+            oraciones++
+          } else {
+            totalPalabras++
+            sumaLongitudes += token.length
+
+            if (token.length > palabraMasLarga.length) {
+              palabraMasLarga = token
+            }
+          }
+        }
+
+        const longitudMedia = totalPalabras > 0 ? (sumaLongitudes / totalPalabras).toFixed(2) : 0
+        return {
+          totalPalabras,
+          longitudMedia,
+          oraciones,
+          palabraMasLarga
+        }
+      }
+    `,
     tasaExito: 88,
   },
   {
@@ -2431,10 +2674,30 @@ function clasificarNumero(n) {
     nivel: 2,
     dificultad: "medio",
     descripcion: dedent`
-      El reto implica simular o resolver un problema relacionado con la Trifuerza de Zelda, posiblemente manipulando combinaciones o estructuras lógicas.
+      Crea un programa que dibuje una Trifuerza de "Zelda" formada por asteriscos. Debes indicarle el número de filas de los triángulos con un entero positivo (n). Cada triángulo calculará su fila mayor utilizando la fórmula 2n-1.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function dibujarTrifuerza(n) {
+        const base = 2 * n - 1
+        let resultado = ""
+
+        for (let i = 1; i <= n; i++) {
+          const espacios = " ".repeat(base - i)
+          const estrellas = "*".repeat(2 * i - 1)
+          resultado += espacios + estrellas + "\n"
+        }
+
+        for (let i = 1; i <= n; i++) {
+          const espaciosIzq = " ".repeat(base - i)
+          const estrellas = "*".repeat(2 * i - 1)
+          const espaciosCentro = " ".repeat(2 * (base - i))
+          resultado += espaciosIzq + estrellas + espaciosCentro + estrellas + "\n"
+        }
+
+        return resultado
+      }
+    `,
     tasaExito: 87,
   },
   {
@@ -2445,22 +2708,93 @@ function clasificarNumero(n) {
     dificultad: "medio",
     descripcion: dedent`
       Se pide identificar o generar números primos gemelos, es decir, pares de primos que difieren en 2 unidades.
+      El programa deberá recibir un rango máximo como número entero positivo.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function esPrimo(num) {
+        if (num < 2) return false
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+          if (num % i === 0) return false
+        }
+        return true
+      }
+
+      function primosGemelos(rangoMax) {
+        const gemelos = []
+        let ultimoPrimo = null
+
+        for (let i = 2; i <= rangoMax; i++) {
+          if (esPrimo(i)) {
+            if (ultimoPrimo !== null && i - ultimoPrimo === 2) {
+              gemelos.push([ultimoPrimo, i])
+            }
+            ultimoPrimo = i
+          }
+        }
+        return gemelos
+      }
+    `,
     tasaExito: 92,
   },
   {
     id: 75,
     slug: "la-espiral",
     titulo: "LA ESPIRAL",
-    nivel: 2,
-    dificultad: "medio",
+    nivel: 3,
+    dificultad: "difícil",
     descripcion: dedent`
       El ejercicio requiere generar o trabajar con una matriz o secuencia que forme una espiral numérica.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function generarEspiral(n) {
+        const matriz = Array.from({ length: n }, () => Array(n).fill(0))
+
+        let valor = 1
+        let inicioFila = 0, finFila = n - 1
+        let inicioCol = 0, finCol = n - 1
+
+        while (inicioFila <= finFila && inicioCol <= finCol) {
+          for (let col = inicioCol; col <= finCol; col++) {
+            matriz[inicioFila][col] = valor++
+          }
+          inicioFila++
+
+          for (let fila = inicioFila; fila <= finFila; fila++) {
+            matriz[fila][finCol] = valor++
+          }
+          finCol--
+
+          for (let fila = inicioFila; fila <= finFila; fila++) {
+            matriz[fila][finCol] = valor++
+          }
+          finCol--
+
+          if (inicioFila <= finFila) {
+            for (let col = finCol; col >= inicioCol; col--) {
+              matriz[finFila][col] = valor++
+            }
+            finFila--
+          }
+
+          if (inicioCol <= finCol) {
+            for (let fila = finFila; fila >= inicioFila; fila--) {
+              matriz[fila][inicioCol] = valor++
+            }
+            inicioCol++
+          }
+        }
+
+        return matriz
+      }
+
+      function imprimirMatriz(matriz) {
+        for (let fila of matriz) {
+          console.log(fila.map(num => String(num).padStart(3, " ")).join(" "))
+        }
+      }
+    `,
     tasaExito: 89,
   },
   {
@@ -2473,7 +2807,38 @@ function clasificarNumero(n) {
       Se debe simular o interactuar con una base de datos básica, posiblemente realizando consultas o inserciones.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      const mysql = require('mysql2')
+
+      const connection = mysql.createConnection({
+        host: 'mysql-5707.dinaserver.com',
+        port: 3306,
+        user: 'mouredev_read',
+        password: 'mouredev_pass',
+        database: 'moure_test'
+      })
+
+      connection.connect((err) => {
+        if (err) {
+          console.error('Error de conexión:', err)
+          return
+        }
+        console.log('Conexión establecida con la base de datos.')
+
+        connection.query('SELECT * FROM challenges', (err, results) => {
+          if (err) {
+            console.error('Error en la consulta:', err)
+            return
+          }
+
+          results.forEach((row, index) => {
+            console.log("Registro " + (index + 1) + ":", row)
+          })
+
+          connection.end()
+        })
+      })
+    `,
     tasaExito: 95,
   },
   {
@@ -2486,7 +2851,28 @@ function clasificarNumero(n) {
       El reto consiste en implementar el cifrado de César, un método de encriptación por desplazamiento de letras.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function cifradoCesar(texto, desplazamiento) {
+        const alfabeto = "abcdefghijklmnopqrstuvwxyz"
+        const alfabetoMayus = alfabeto.toUpperCase()
+        let resultado = ""
+
+        for (let char of texto) {
+          if (alfabeto.includes(char)) {
+            let nuevaPos = (alfabeto.indexOf(char) + desplazamiento) % 26
+            if (nuevaPos < 0) nuevaPos += 26
+            resultado += alfabeto[nuevaPos]
+          } else if (alfabetoMayus.includes(char)) {
+            let nuevaPos = (alfabetoMayus.indexOf(char) + desplazamiento) % 26
+            if (nuevaPos < 0) nuevaPos += 26
+            resultado += alfabetoMayus[nuevaPos]
+          } else {
+            resultado += char
+          }
+        }
+        return resultado
+      }
+    `,
     tasaExito: 93,
   },
   {
@@ -2496,10 +2882,48 @@ function clasificarNumero(n) {
     nivel: 2,
     dificultad: "medio",
     descripcion: dedent`
-      Se debe detectar una secuencia específica de teclas, como el famoso código Konami, en una entrada.
+      Crea un programa que detecte cuando el famoso "Código Konami" se ha introducido correctamente desde el teclado. Si sucede esto, debe notificarse mostrando un mensaje en la terminal.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      const konamiCode = [
+        'ArrowUp', 'ArrowUp',
+        'ArrowDown', 'ArrowDown',
+        'ArrowLeft', 'ArrowRight',
+        'ArrowLeft', 'ArrowRight',
+        'b', 'a'
+      ]
+
+      let posicion = 0
+
+      process.stdin.setRawMode(true)
+      process.stdin.resume()
+      process.stdin.setEncoding('utf8')
+
+      console.log("Introduce el Código Konami...")
+
+      process.stdin.on('data', (key) => {
+        if (key === '\u0003') {
+          process.exit()
+        }
+        let tecla = key
+        if (key === '\u001B[A') tecla = 'ArrowUp'
+        else if (key === '\u001B[B') tecla = 'ArrowDown'
+        else if (key === '\u001B[D') tecla = 'ArrowLeft'
+        else if (key === '\u001B[C') tecla = 'ArrowRight'
+        else tecla = key.toLowerCase()
+
+        if (tecla === konamiCode[posicion]) {
+          posicion++
+          if (posicion === konamiCode.length) {
+            console.log("¡Código Konami detectado! 🎉")
+            posicion = 0
+          }
+        } else {
+          posicion = 0
+        }
+      })
+    `,
     tasaExito: 90,
   },
   {
