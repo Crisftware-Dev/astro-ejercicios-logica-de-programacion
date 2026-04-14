@@ -2936,7 +2936,28 @@ async function obtenerAgenda(dia) {
       El ejercicio implica escribir pruebas unitarias o validar el comportamiento de un programa mediante testing.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function esViernes13(mes, anio) {
+        const fecha = new Date(anio, mes - 1, 13)
+        return fecha.getDay() === 5 // 5 = viernes
+      }
+
+      module.exports = esViernes13
+
+      const esViernes13 = require('./viernes13')
+
+      test('Febrero 2015 tuvo viernes 13', () => {
+        expect(esViernes13(2, 2015)).toBe(true)
+      })
+
+      test('Agosto 2021 no tuvo viernes 13', () => {
+        expect(esViernes13(8, 2021)).toBe(false)
+      })
+
+      test('Octubre 2023 sí tuvo viernes 13', () => {
+        expect(esViernes13(10, 2023)).toBe(true)
+      })
+    `,
     tasaExito: 88,
   },
   {
@@ -2946,10 +2967,29 @@ async function obtenerAgenda(dia) {
     nivel: 2,
     dificultad: "medio",
     descripcion: dedent`
-      Se debe simular una cuenta regresiva, posiblemente con formato de tiempo o eventos.
+      Crea una función que reciba dos parámetros para crear una cuenta atrás. El primero, representa el número en el que comienza la cuenta. El segundo, los segundos que tienen que transcurrir entre cada cuenta. Sólo se aceptan números enteros positivos. El programa finaliza al llegar a cero. Debes imprimir cada número de la cuenta atrás.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function cuentaAtras(inicio, segundos) {
+        if (!Number.isInteger(inicio) || !Number.isInteger(segundos) || inicio <= 0 || segundos <= 0) {
+          console.log("Error: ambos parámetros deben ser enteros positivos.")
+          return
+        }
+
+        let actual = inicio
+
+        const intervalo = setInterval(() => {
+          console.log(actual)
+          actual--
+
+          if (actual < 0) {
+            clearInterval(intervalo)
+            console.log("¡Cuenta atrás finalizada!")
+          }
+        }, segundos * 1000)
+      }
+    `,
     tasaExito: 91,
   },
   {
@@ -2959,10 +2999,21 @@ async function obtenerAgenda(dia) {
     nivel: 1,
     dificultad: "fácil",
     descripcion: dedent`
-      El reto consiste en evaluar o validar una expresión matemática ingresada como cadena.
+      Crea una función que reciba una expresión matemática (String) y compruebe si es correcta. 
+      Retornará true o false. Para que una expresión matemática sea correcta debe poseer un número, una operación y otro número separados por espacios. Tantos números y operaciones como queramos. Números positivos, negativos, enteros o decimales. Operaciones soportadas: + - * / %.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function validarExpresion(expresion) {
+        // Expresión regular:
+        // - Número: entero o decimal, positivo o negativo
+        // - Operador: + - * / %
+        // - Separados por espacios
+        const regex = /^(-?\d+(\.\d+)?)(\s[+\-*/%]\s(-?\d+(\.\d+)?))*$/
+
+        return regex.test(expresion.trim())
+      }
+    `,
     tasaExito: 96,
   },
   {
@@ -2972,10 +3023,30 @@ async function obtenerAgenda(dia) {
     nivel: 2,
     dificultad: "medio",
     descripcion: dedent`
-      Se debe identificar un carácter que aparece de forma inesperada en una cadena, posiblemente un intruso.
+      Crea una función que reciba dos cadenas de texto casi iguales, a excepción de uno o varios caracteres.
+      La función debe encontrarlos y retornarlos en formato lista/array. Ambas cadenas de texto deben ser iguales en longitud. Las cadenas de texto son iguales elemento a elemento. No se pueden utilizar operaciones propias del lenguaje que lo resuelvan directamente.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function diferencias(cadena1, cadena2) {
+        if (cadena1.length !== cadena2.length) {
+          console.log("Error: las cadenas deben tener la misma longitud.")
+          return []
+        }
+
+        const resultado = []
+        for (let i = 0; i < cadena1.length; i++) {
+          if (cadena1[i] !== cadena2[i]) {
+            resultado.push({
+              posicion: i,
+              cadena1: cadena1[i],
+              cadena2: cadena2[i]
+            })
+          }
+        }
+        return resultado
+      }
+    `,
     tasaExito: 89,
   },
   {
@@ -2988,7 +3059,16 @@ async function obtenerAgenda(dia) {
       El ejercicio requiere simular el funcionamiento de un teclado T9 para convertir pulsaciones en texto.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function convertir(tecla, repeticiones, mapa) {
+        const letras = mapa[tecla]
+        if (!letras) return ""
+        const indice = (repeticiones - 1) % letras.length
+        return letras[indice]
+      }
+
+      EJEMPLO COMPLETO EN EL LINK.
+    `,
     tasaExito: 94,
   },
   {
@@ -2998,10 +3078,32 @@ async function obtenerAgenda(dia) {
     nivel: 2,
     dificultad: "medio",
     descripcion: dedent`
-      Se debe modelar o simular el funcionamiento de un ábaco para realizar operaciones aritméticas.
+      Crea una función que sea capaz de leer el número representado por el ábaco. El ábaco se representa por un array con 7 elementos. Cada elemento tendrá 9 "O" (aunque habitualmente tiene 10 para realizar operaciones) para las cuentas y una secuencia de "---" para el alambre. El primer elemento del array representa los millones, y el último las unidades. El número en cada elemento se representa por las cuentas que están a la izquierda del alambre.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function leerAbaco(abaco) {
+        if (!Array.isArray(abaco) || abaco.length !== 7) {
+          console.log("Error: el ábaco debe tener exactamente 7 filas.")
+          return null
+        }
+
+        let numero = ""
+
+        for (let fila of abaco) {
+          const partes = fila.split("---")
+          if (partes.length !== 2) {
+            console.log("Error: cada fila debe contener un alambre '---'.")
+            return null
+          }
+
+          const izquierda = partes[0]
+          const valor = izquierda.length
+          numero += valor.toString()
+        }
+        return parseInt(numero, 10)
+      }
+    `,
     tasaExito: 87,
   },
   {
@@ -3014,7 +3116,22 @@ async function obtenerAgenda(dia) {
       El reto implica convertir un número en la notación de columna de Excel (A, B, ..., Z, AA, AB, ...).
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function numeroAColumnaExcel(num) {
+        if (!Number.isInteger(num) || num <= 0) {
+          throw new Error("El número debe ser un entero positivo.")
+        }
+
+        let columna = ""
+
+        while (num > 0) {
+          let resto = (num - 1) % 26
+          columna = String.fromCharCode(65 + resto) + columna
+          num = Math.floor((num - 1) / 26)
+        }
+        return columna
+      }
+    `,
     tasaExito: 90,
   },
   {
@@ -3027,33 +3144,38 @@ async function obtenerAgenda(dia) {
       Se debe implementar una simulación básica del juego Tetris, manejando piezas y colisiones.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: "Ejemplo en el  botón de github",
     tasaExito: 85,
   },
   {
     id: 87,
     slug: "txt",
     titulo: "TXT",
-    nivel: 1,
-    dificultad: "fácil",
+    nivel: 3,
+    dificultad: "difícil",
     descripcion: dedent`
-      El ejercicio consiste en leer o procesar un archivo de texto plano (TXT) para extraer información.
+      Crea un programa capaz de interactuar con un fichero TXT.
+      IMPORTANTE: El fichero TXT NO debe subirse como parte de la corrección. Únicamente el código.
+      - Si no existe, debe crear un fichero llamado "text.txt".
+      - Desde el programa debes ser capaz de introducir texto por consola y guardarlo en una nueva línea cada vez que se pulse el botón "Enter".
+      - Si el fichero existe, el programa tiene que dar la opción de seguir escribiendo a continuación o borrar su contenido y comenzar desde el principio.
+      - Si se selecciona continuar escribiendo, se tiene que mostrar por consola el texto que ya posee el fichero. 
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: "Ejemplo disponible en el botón de github",
     tasaExito: 97,
   },
   {
     id: 88,
     slug: "primeros-pasos",
     titulo: "PRIMEROS PASOS",
-    nivel: 2,
-    dificultad: "medio",
+    nivel: 1,
+    dificultad: "fácil",
     descripcion: dedent`
       Se debe realizar una introducción práctica a conceptos básicos de programación o manejo de datos.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: "Ejemplo disponible en el botón de github",
     tasaExito: 92,
   },
   {
@@ -3066,7 +3188,28 @@ async function obtenerAgenda(dia) {
       El reto requiere generar todas las permutaciones posibles de un conjunto de elementos.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function permutaciones(input) {
+        let arr = typeof input === "string" ? input.split("") : input
+
+        if (arr.length === 0) return [[]]
+
+        const resultado = []
+
+        for (let i = 0; i < arr.length; i++) {
+          const actual = arr[i]
+          const resto = arr.slice(0, i).concat(arr.slice(i + 1))
+          const subpermutaciones = permutaciones(resto)
+
+          for (let sub of subpermutaciones) {
+            resultado.push([actual, ...sub])
+          }
+        }
+        return typeof input === "string"
+          ? resultado.map(p => p.join(""))
+          : resultado
+      }
+    `,
     tasaExito: 88,
   },
   {
