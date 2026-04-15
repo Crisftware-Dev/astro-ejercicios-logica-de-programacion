@@ -3222,7 +3222,31 @@ async function obtenerAgenda(dia) {
       Se debe convertir entre códigos de color en formato hexadecimal y valores RGB.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function convertirColor(input) {
+        if (typeof input === "string") {
+          let hex = input.replace(/^#/, '')
+          if (hex.length !== 6) throw new Error("Formato hexadecimal inválido")
+
+          const r = parseInt(hex.substring(0, 2), 16)
+          const g = parseInt(hex.substring(2, 4), 16)
+          const b = parseInt(hex.substring(4, 6), 16)
+
+          return { r, g, b } // Devuelve objeto RGB
+        }
+
+        if (typeof input === "object" && input !== null) {
+          const { r, g, b } = input
+          if ([r, g, b].some(v => v < 0 || v > 255)) {
+            throw new Error("Valores RGB deben estar entre 0 y 255")
+          }
+          const toHex = v => v.toString(16).padStart(2, '0')
+          return "#" + toHex(r) + toHex(g) + toHex(b) // Devuelve string hex
+        }
+
+        throw new Error("Entrada inválida: debe ser hex string o {r,g,b}")
+      }
+    `,
     tasaExito: 91,
   },
   {
@@ -3232,10 +3256,33 @@ async function obtenerAgenda(dia) {
     nivel: 2,
     dificultad: "medio",
     descripcion: dedent`
-      El ejercicio implica resolver o generar problemas de sumas, posiblemente en un formato específico.
+      Crea una función que encuentre todas las combinaciones de los números de una lista que suman el valor objetivo.
+      - La función recibirá una lista de números enteros positivos y un valor objetivo.
+      - Para obtener las combinaciones sólo se puede usar una vez cada elemento de la lista (pero pueden existir elementos repetidos en ella).
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function combinacionesQueSuman(lista, objetivo) {
+        const resultados = []
+
+        function backtrack(inicio, camino, sumaActual) {
+          if (sumaActual === objetivo) {
+            resultados.push([...camino])
+            return
+        }
+        if (sumaActual > objetivo) return
+
+        for (let i = inicio; i < lista.length; i++) {
+          camino.push(lista[i])
+          backtrack(i + 1, camino, sumaActual + lista[i])
+          camino.pop()
+        }
+      }
+
+      backtrack(0, [], 0)
+      return resultados
+    }
+    `,
     tasaExito: 89,
   },
   {
@@ -3245,10 +3292,28 @@ async function obtenerAgenda(dia) {
     nivel: 1,
     dificultad: "fácil",
     descripcion: dedent`
-      Se debe encontrar o validar triples de números que cumplan el teorema de Pitágoras.
+      Crea una función que encuentre todos los triples pitagóricos (ternas) menores o iguales a un número dado.
+     - Debes buscar información sobre qué es un triple pitagórico. - La función únicamente recibe el número máximo que puede aparecer en el triple.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function triplesPitagoricos(max) {
+        const resultados = []
+
+        for (let a = 1; a <= max; a++) {
+          for (let b = a; b <= max; b++) {
+            const c2 = a * a + b * b
+            const c = Math.sqrt(c2)
+
+            if (Number.isInteger(c) && c <= max) {
+              resultados.push([a, b, c])
+            }
+          }
+        }
+
+        return resultados
+      }
+    `,
     tasaExito: 95,
   },
   {
@@ -3258,10 +3323,25 @@ async function obtenerAgenda(dia) {
     nivel: 3,
     dificultad: "difícil",
     descripcion: dedent`
-      El reto requiere generar una tabla de multiplicar completa, posiblemente con formato avanzado o condiciones.
+      Crea un programa que sea capaz de solicitarte un número y se encargue de imprimir su tabla de multiplicar entre el 1 y el 10. - Debe visualizarse qué operación se realiza y su resultado.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: `
+      function tablaMultiplicar() {
+        const entrada = prompt("Introduce un número:")
+        const numero = parseInt(entrada)
+
+        if (isNaN(numero)) {
+          console.log("Debes introducir un número válido.")
+          return
+        }
+
+        console.log("Tabla de multiplicar del" + numero)
+        for (let i = 1; i <= 10; i++) {
+          console.log(numero + " x " + i + " = " + numero * i)
+        }
+      }
+    `,
     tasaExito: 83,
   },
   {
@@ -3271,10 +3351,30 @@ async function obtenerAgenda(dia) {
     nivel: 3,
     dificultad: "difícil",
     descripcion: dedent`
-      Se debe simular una casa encantada, posiblemente resolviendo un puzzle o navegación lógica.
+      Este es un reto especial por Halloween.
+      - Te encuentras explorando una mansión abandonada llena de habitaciones.
+      - En cada habitación tendrás que resolver un acertijo para poder avanzar a la siguiente.
+      - Tu misión es encontrar la habitación de los dulces.
+      - Se trata de implementar un juego interactivo de preguntas y respuestas por terminal.
+      - (Tienes total libertad para ser creativo con los textos)
+      - 🏰 Casa: La mansión se corresponde con una estructura cuadrada 4 x 4
+      - que deberás modelar. Las habitaciones de puerta y dulces no tienen enigma.
+      - (16 habitaciones, siendo una de entrada y otra donde están los dulces)
+      - Esta podría ser una representación:
+       🚪⬜️⬜️⬜️
+       ⬜️👻⬜️⬜️
+       ⬜️⬜️⬜️👻
+       ⬜️⬜️🍭⬜️
+      - ❓ Enigmas: Cada habitación propone un enigma aleatorio que deberás responder con texto.
+      - Si no lo aciertas no podrás desplazarte.
+      - 🧭 Movimiento: Si resuelves el enigma se te preguntará a donde quieres desplazarte.
+      - (Ejemplo: norte/sur/este/oeste. Sólo deben proporcionarse las opciones posibles)
+      - 🍭 Salida: Sales de la casa si encuentras la habitación de los dulces.
+      - 👻 (Bonus) Fantasmas: Existe un 10% de que en una habitación aparezca un fantasma y
+      - tengas que responder dos preguntas para salir de ella.
     `,
     ejemplo: "Ejemplo no disponible",
-    codigo: "",
+    codigo: "Ejemplo disponible en git-hub",
     tasaExito: 82,
   },
   {
@@ -3284,7 +3384,11 @@ async function obtenerAgenda(dia) {
     nivel: 1,
     dificultad: "fácil",
     descripcion: dedent`
-      El ejercicio consiste en determinar un punto de encuentro basado en condiciones dadas.
+       Crea una función que calcule el punto de encuentro de dos objetos en movimiento en dos dimensiones.
+       - Cada objeto está compuesto por una coordenada xy y una velocidad de desplazamiento (vector de desplazamiento) por unidad de tiempo (también en formato xy).
+       - La función recibirá las coordenadas de inicio de ambos objetos y sus velocidades.
+       - La función calculará y mostrará el punto en el que se encuentran y el tiempo que tardarn en lograrlo.
+       - La función debe tener en cuenta que los objetos pueden no llegar a encontrarse.
     `,
     ejemplo: "Ejemplo no disponible",
     codigo: "",
