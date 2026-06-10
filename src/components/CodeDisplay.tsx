@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CopyText, IconChevronUp } from "src/icons/icons";
+import { CopyText, IconChevronUp } from "../icons/icons";
 
 interface CodeDisplayProps {
   codigo: string;
