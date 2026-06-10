@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: false
+  sharp: false
+minimumReleaseAgeExclude:
+  - prettier@3.8.4
+  - astro@6.4.5
