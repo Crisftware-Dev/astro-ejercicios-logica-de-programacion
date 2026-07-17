@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ejercicios-logica-programacion.vercel.app/sitemap.xml
