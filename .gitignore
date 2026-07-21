@@ -20,9 +20,13 @@ pnpm-debug.log*
 
 # agent skills (auto-installed)
 .agents/
+.opencode/skills/
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# opencode settings MCPs
+opencode.json
