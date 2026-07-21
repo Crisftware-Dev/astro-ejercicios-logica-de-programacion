@@ -9,7 +9,7 @@ const { level } = Astro.params;
 const ejerciciosDelNivel = ejercicios.filter((e) => e.nivel === Number(level));
 ---
 
-<Layout title={`Nivel ${level}`}>
+<Layout title={`Nivel ${level}`} description={`Ejercicios de lógica y programación del nivel ${level}. Resuelve ${ejerciciosDelNivel.length} ejercicios prácticos y mejora tus habilidades de JavaScript.`}>
   <div class="min-h-screen bg-black text-white">
     <header
       class="text-center py-20 bg-linear-to-b from-purple-900 via-black to-black"

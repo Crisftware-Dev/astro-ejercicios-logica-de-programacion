@@ -5,19 +5,68 @@ import "../styles/globals.css";
 
 interface Props {
   title: string;
+  description?: string;
 }
 
-const { title } = Astro.props;
+const DEFAULT_DESCRIPTION =
+  "+100 ejercicios de lógica y programación ordenados por dificultad. Mejora tus habilidades de coding con ejercicios prácticos de JavaScript.";
+
+const { title, description = DEFAULT_DESCRIPTION } = Astro.props;
+
+const siteUrl = new URL(Astro.url.pathname, "https://ejercicios-logica-programacion.vercel.app").href;
+const siteName = "Ejercicios de Lógica y Programación";
+const pageTitle = Astro.url.pathname === "/" ? siteName : `${title} | ${siteName}`;
+const ogImage = "/favicon.svg";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
-    <title>{title}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={siteUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:image" content={`https://ejercicios-logica-programacion.vercel.app${ogImage}`} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Structured data -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": `${siteUrl}#website`,
+          "url": siteUrl,
+          "name": siteName,
+          "description": DEFAULT_DESCRIPTION,
+          "inLanguage": "es-MX"
+        },
+        {
+          "@type": "WebPage",
+          "@id": siteUrl,
+          "url": siteUrl,
+          "name": pageTitle,
+          "description": description,
+          "isPartOf": { "@id": `${siteUrl}#website` },
+          "inLanguage": "es-MX"
+        }
+      ]
+    })} />
 
     <ClientRouter fallback="none" />
   </head>
