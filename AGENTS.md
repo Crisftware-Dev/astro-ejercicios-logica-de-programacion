@@ -35,6 +35,9 @@ Guía compacta para agentes que trabajan en este repositorio. Solo hechos verifi
 3. `pnpm build` (¿el build server funciona con el adapter de Vercel?)
 No hay tests automatizados, así que build + revisión manual son las únicas barreras.
 
-## Artefactos SEO (añadidos 2026-07)
-- Existen `public/robots.txt` y `public/sitemap.xml`. El sitemap es **estático** — actualízalo manualmente si se añaden rutas de nivel superior (p. ej. Nivel 3, `/about`).
-- Las páginas aún carecen de `<meta name="description">`, etiquetas Open Graph/Twitter, y `<html lang="es">` (actualmente `lang="en"` en `Layout.astro`).
+## SEO (implementado 2026-07)
+- `public/robots.txt` permite rastreo total y apunta al sitemap.
+- `public/sitemap.xml` es **estático** — actualízalo manualmente si se añaden rutas de nivel superior (p. ej. Nivel 3, `/about`).
+- `Layout.astro` incluye: `<html lang="es">`, `<meta name="description">`, Open Graph (`og:title`, `og:description`, `og:image`, `og:url`), Twitter Cards, `<link rel="canonical">`, `<meta name="robots">`, y JSON-LD estructurado (`WebSite` + `WebPage`).
+- Cada página (`index`, `levels`, `[level]`) pasa una `description` única al Layout.
+- La URL canónica y OG usan `https://ejercicios-logica-programacion.vercel.app` como dominio base. Si el dominio cambia, actualizar en `Layout.astro` y `sitemap.xml`.
